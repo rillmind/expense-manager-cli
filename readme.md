@@ -11,6 +11,11 @@ delete, list, and mark the status of expenses. Expenses are stored in a sqlite f
   <img src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/palette/macchiato.png">
 </p>
 
+## Why it exists
+
+It is the [Expense Tracker](https://roadmap.sh/projects/expense-tracker) project from the roadmap.sh
+back-end roadmap, built in Go following the project's specification, with persistence in SQLite.
+
 ## Requirements
 
 - Go 1.24.8 or higher
@@ -65,6 +70,28 @@ a C compiler because of the sqlite driver.
 ./expense-tracker summary --month 8
 # Total expenses for August: $20
 ```
+
+## How to test
+
+There are no automated tests. `go vet ./...` checks the code. To test the behavior, start from a
+fresh database and run the commands. Note that the current CLI takes **positional arguments**: the
+`--description`, `--amount` and `--id` flags in the example above fail with `Not enough arguments!`
+or `unknown flag: --id`. Only `--month` (`-m`) is a flag.
+
+```sh
+go run ./cmd/seed                      # recreates db/sqlite.db (deletes existing data)
+go build -o expense-tracker ./cmd/server
+./expense-tracker add "Lunch" 20       # Expense added! (ID: 1)
+./expense-tracker add "Dinner" 10      # Expense added! (ID: 2)
+./expense-tracker list                 # both expenses, amounts in R$
+./expense-tracker update 1 "Big lunch" 25
+./expense-tracker delete 2
+./expense-tracker list                 # only "Big lunch", R$25.00
+./expense-tracker summary --month 10   # total for October (current month in the dates above)
+```
+
+Known bug: `./expense-tracker summary` without `--month` always prints `Total expenses: R$0.00`,
+because `SummaryExpenses` calls `rows.Scan` without `rows.Next()`. The monthly summary works.
 
 ## Code information
 
