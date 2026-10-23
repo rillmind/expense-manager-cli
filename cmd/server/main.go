@@ -6,8 +6,8 @@ import (
 	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/rillmind/expenseManagerCli/db"
-	"github.com/rillmind/expenseManagerCli/src/expense"
+	"github.com/rillmind/expense-manager-cli/db"
+	"github.com/rillmind/expense-manager-cli/src/expense"
 	"github.com/spf13/pflag"
 )
 

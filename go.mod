@@ -1,4 +1,4 @@
-module github.com/rillmind/expenseManagerCli
+module github.com/rillmind/expense-manager-cli
 
 go 1.24.8
 
